@@ -92,9 +92,44 @@ class Spot:
         return False
 
 
-# h function
+# h function distance between point1 and point2 using manhattan distance
 def h(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
     return abs(x1 - x2) + abs(y1 - y2)
 
+# make a grid of spots
+def make_grid(rows, width):
+    grid = []
+    #gap is the width of each spot, so we can calculate it by dividing the total width of the grid by the number of rows.
+    gap = width // rows
+    for i in range(rows):
+        grid.append([]) # create a list for each row
+        for j in range(rows):
+            spot = Spot(i, j, gap, rows) # create a spot for each column in the row
+            grid[i].append(spot)# add the spot to the row
+    return grid
+# Bascialy inside the grid is like matrix or likr list insed the list, 
+# so we have a list of rows and each row is a list of spots
+# so we can access each spot by using grid[row][col]
+
+# draw the grid lines
+def draw_grid(win, rows, width):
+    gap = width // rows
+    for i in range(rows):
+        #pygame.draw.line(surface, color, start_pos, end_pos, width)
+        # win is the surface we want to draw on 
+        pygame.draw.line(win, GREY, (0, i * gap), (width, i * gap)) # horizontal lines
+    for j in range(rows):
+        pygame.draw.line(win, GREY, (j * gap, 0), (j * gap, width)) # vertical lines
+
+# main draw dfunction that draws everything on the screen
+def draw(win, grid, rows, width):
+    win.fill(WHITE)  # fill the window with white color
+    for row in grid:
+        for spot in row:
+            spot.draw(win) #it helps to color the spot on the screen, so we can see it visually.
+            # otherwise it will just be a white square and we won't be able to see the different colors of the spots, 
+            # so we won't be able to see the path or the barriers or the start and end spots.
+    draw_grid(win, rows, width) # draw the grid lines on top of the spots
+    pygame.display.update() # update the display to show the changes
